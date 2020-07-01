@@ -1,0 +1,35 @@
+{
+  "name": "zenroom1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@restroom-mw/core": "^0.3.0",
+    "@restroom-mw/db": "^0.3.0",
+    "@restroom-mw/ui": "^0.3.0",
+    "bcryptjs": "^2.4.3",
+    "chalk": "^4.1.0",
+    "core-js": "3.6.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.19",
+    "morgan": "^1.10.0",
+    "regenerator-runtime": "^0.13.5",
+    "rimraf": "^3.0.2",
+    "sqlite3": "^4.2.0",
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
