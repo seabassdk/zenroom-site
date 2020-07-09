@@ -1,7 +1,12 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const contractSchema = new mongoose.Schema({
     name: {
+        type: String,
+        required: true
+    },
+    file: {
         type: String,
         required: true
     },
@@ -27,4 +32,4 @@ const contractSchema = new mongoose.Schema({
     }
 });
 
-module.exports = contractSchema;
+export default contractSchema;

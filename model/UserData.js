@@ -1,5 +1,7 @@
-const mongoose =require('mongoose');
-const Contract = require('./Contract');
+// const mongoose =require('mongoose');
+// const Contract = require('./Contract');
+import mongoose from 'mongoose';
+import Contract from './Contract.js';
 
 const indySchema = new mongoose.Schema({ 
     content: {
@@ -21,6 +23,10 @@ const userDataSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now
@@ -33,4 +39,4 @@ const userDataSchema = new mongoose.Schema({
     results: [indySchema]
 });
 
-module.exports = mongoose.model('UserData', userDataSchema);
+export default mongoose.model('UserData', userDataSchema);

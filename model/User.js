@@ -1,4 +1,5 @@
-const mongoose =require('mongoose');
+// const mongoose =require('mongoose');
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -7,9 +8,15 @@ const userSchema = new mongoose.Schema({
         min: 3,
         max: 255
     },
+    username: {
+        type: String,
+        required: false,
+        min: 3,
+        max: 255
+    },
     email: {
         type: String,
-        required: true,
+        required: false,
         max: 255,
         min: 6
     },
@@ -30,4 +37,4 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);
