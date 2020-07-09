@@ -84,8 +84,8 @@ app.use('/data', userDataRoute);
 
 app.use(express.static('./build'));
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join('./build', 'index.html'));
-// });
+app.get('*', (req, res) => {
+  res.sendFile(path.join('./build', 'index.html'));
+});
 
 app.listen(port, () => console.log('Server up and running on ' + port));
