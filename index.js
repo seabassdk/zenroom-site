@@ -22,6 +22,8 @@ import zencode from "@restroom-mw/core";
 import ui from "@restroom-mw/ui";
 import db from "@restroom-mw/db";
 
+import conSeq from './routes/swag.js';
+
 // const buildPath = path.join(__dirname, 'build');
 
 
@@ -57,6 +59,35 @@ app.use(morgan("dev"));
 app.set("json spaces", 2);
 app.use("/api/*", zencode.default);
 app.use("/docs", ui.default({ path: "./zencode" }));
+
+
+
+// const testSwag = (path) => {
+//   return (req, res, next) => {
+//     console.log('Middleware inside a function. req.username:');
+//     console.log(req.username);
+
+//     next();
+//   }
+// }
+
+// const setSwagUi = (app) => {
+//   console.log('Setting swag ui with path: ' + app.get('swagpath'));
+//     return ui.default({ path: app.get('swagpath') })
+// }
+
+// app.use("/test/:username",function(req, res, next) {
+//   console.log('went through middleware');
+//   app.set('swagpath', './zencode')
+//   console.log('set username inside first middleware: ' + app.get('swagpath'));
+//   next();
+// }, function(req, res, next) {
+//   console.log('Next Middleware and path is ' + app.get('swagpath'));
+//   // res.send('done.');
+//   next();
+// }, setSwagUi(app));
+
+
 
 // app.use("/testUser",function(req, res, next) {
 //   const user = req.path;

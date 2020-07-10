@@ -134,8 +134,8 @@ router.use('/test/:user', function(req, res, next){
 }, function(req, res, next){
 
     // return ui.default({ path: "./zencode/"});
-    next(ui.default({ path: "./zencode/"}));
-});
+    next();
+}, ui.default({ path: "./zencode/"}));
 
 // router.use('/test/', ui.default({ path: "./zencode/" + username}));
 

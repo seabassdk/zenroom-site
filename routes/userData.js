@@ -254,22 +254,25 @@ router.post('/load/:type', verify, (req, res) => {
                 default:
                     fileType = 'not found';
             }
-
+            console.log('Determined file type: ' + filetype);
             const dir = process.cwd() + '/zencode/' + req.body.username;
 
             let returnFileArray = [];
             if (fs.existsSync(dir)) {
                 console.log('getting files with type: ' + filetype);
+                //get all the files in the user directory
                 const dirCont = await fs.readdirSync(dir);
+                //filter files to get the requested file type
                 returnFileArray = dirCont.filter((file) => {
                     return file.match(new RegExp(`.*\.(${filetype})`, 'ig'));
                 });
                 returnFileArray = returnFileArray.map((fileName) => {
-                    return { name: fileName }
+                    const content = readFile(dir + '/' + fileName);
+                    return { name: fileName, content }
                 });
                 console.log(returnFileArray);
             } else {
-                console.log('NO FILES FOUND FOR: ' + fileType)
+                console.log('NO FILES FOUND FOR: ' + filetype)
             }
 
 
@@ -412,16 +415,18 @@ router.post('/update/contractfield/:index', verify, (req, res) => {
 
             userData['contracts'][index] = reqContract.db;
 
-
+            let fileSwitch;
             const fileDir = process.cwd() + '/zencode/' + username + '/' + userData['contracts'][index].file;
             if (fs.existsSync(fileDir + '.zen.off')) {
                 createFile(fileDir + '.zen.off', reqContract.zencode);
                 createFile(fileDir + '.keys.off', reqContract.keys);
                 createFile(fileDir + '.conf.off', reqContract.config);
+                fileSwitch='off';
             } else {
                 createFile(fileDir + '.zen', reqContract.zencode);
                 createFile(fileDir + '.keys', reqContract.keys);
                 createFile(fileDir + '.conf', reqContract.config);
+                fileSwitch='on';
             }
 
 
@@ -433,7 +438,7 @@ router.post('/update/contractfield/:index', verify, (req, res) => {
                     return res.status(501).send('Could not save contract in db');
                 }
                 const contract = userData['contracts'][index];
-                res.status(200).send({ db: contract, zencode: reqContract.zencode, keys: reqContract.keys, config: reqContract.config });
+                res.status(200).send({ db: contract, zencode: reqContract.zencode, keys: reqContract.keys, config: reqContract.config, switch: fileSwitch });
             });
 
 
