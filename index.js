@@ -117,7 +117,7 @@ app.use(express.static('./build'));
 
 app.get('*', (req, res) => {
   // res.sendFile(path.join('./build', 'index.html'));
-  res.sendFile('./build/index.html', { root: __dirname });
+  res.sendFile('./build/index.html', { root: '.' });
 });
 
 app.listen(port, () => console.log('Server up and running on ' + port));
