@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,9 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@restroom-mw/core": "^0.3.3",
-    "@restroom-mw/db": "^0.3.0",
-    "@restroom-mw/ui": "^0.3.2",
+    "@restroom-mw/core": "^0.4.0",
+    "@restroom-mw/db": "^0.4.0",
+    "@restroom-mw/ui": "^0.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",

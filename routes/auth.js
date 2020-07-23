@@ -18,24 +18,31 @@ import { registerValidation, loginValidation } from '../validation/userValidatio
 const router = express.Router({mergeParams: true});
 
 router.post('/register', async (req, res) => {
-    console.log('Received request to register user');
-    console.log(req.body);
     //Lets validate the data before we add a user
+    console.log('registering new user..');
+    console.log('the code is: ' + req.body.code);
     const { error } = registerValidation(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message);
     }
 
+    if (process.env.SECRET_CODE !== req.body.code) {
+        return res.status(501).send('Wrong code! Please contact Andrea.');
+    }
+
+    console.log('hashing password');
     //Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
+    console.log('creating new user')
     //Create the new user
     const user = new User({
         username: req.body.username,
         password: hashedPassword
     });
 
+    console.log('checking if user exists..');
     //Check if the user is already in the database
     const emailExist = await User.findOne({ username: req.body.username });
 
@@ -46,6 +53,7 @@ router.post('/register', async (req, res) => {
 
 
     try {
+        console.log('saving user to db..');
         const savedUser = await user.save((err) => {
             if (err) {
                 console.log('Could not save USER in mongo db. Error: ');

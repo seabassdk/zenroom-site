@@ -18,11 +18,11 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 
+// import zencode from "@restroom-mw/core";
+// import ui from "@restroom-mw/ui";
+// import db from "@restroom-mw/db";
 import zencode from "@restroom-mw/core";
-import ui from "@restroom-mw/ui";
 import db from "@restroom-mw/db";
-
-import conSeq from './routes/swag.js';
 
 // const buildPath = path.join(__dirname, 'build');
 
@@ -33,9 +33,10 @@ import conSeq from './routes/swag.js';
 // const authRoute = require('./routes/auth');
 // const userDataRoute = require('./routes/userData');
 // const testRoute = require('./routes/test');
-
+import ui from "./ui/index.js";
 import authRoute from './routes/auth.js';
 import userDataRoute from './routes/userData.js';
+import swagRoute from './routes/swag.js';
 
 const app = express();
 
@@ -57,8 +58,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.set("json spaces", 2);
+// app.use("/api/*", zencode.default);
+// app.use("/docs", ui.default({ path: "./zencode" }));
+
+app.use(db.default);
+app.use("/docs/:user", ui);
 app.use("/api/*", zencode.default);
-app.use("/docs", ui.default({ path: "./zencode" }));
 
 
 
@@ -111,6 +116,7 @@ app.use(express.json());
 //Route middleware
 app.use('/user', authRoute);
 app.use('/data', userDataRoute);
+app.use('/swag', swagRoute);
 // app.use('/test', testRoute);
 
 app.use(express.static('./build'));
