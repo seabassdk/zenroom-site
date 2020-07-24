@@ -40,7 +40,7 @@ import swagRoute from './routes/swag.js';
 
 const app = express();
 
-const port = process.env.PORT || 3010;
+const port = process.env.HTTPS_PORT || 3010;
 
 dotenv.config();
 
