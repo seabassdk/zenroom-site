@@ -12,6 +12,8 @@ import UserData from '../model/UserData.js';
 
 const router = express.Router({ mergeParams: true });
 
+const contractDir =  process.cwd() + '/contracts/';
+
 router.post('/save/contract', verify, (req, res) => {
 
     console.log('Saving contract to db: ');
@@ -27,7 +29,7 @@ router.post('/save/contract', verify, (req, res) => {
         data: req.body.data,
         config: req.body.config
     };
-    const userDir = process.cwd() + '/zencode/' + req.body.username;
+    const userDir = contractDir + req.body.username;
     const zencodeDir = userDir + '/' + fileName + '.zen';
     const keysDir = userDir + '/' + fileName + '.keys';
     const configDir = userDir + '/' + fileName + '.conf';
@@ -185,7 +187,7 @@ router.post('/load/contracts', verify, (req, res) => {
 
             const responseArray = [];
             contractsArray.forEach((contract) => {
-                const fileDir = process.cwd() + '/zencode/' + req.body.username + '/' + contract.file;
+                const fileDir = contractDir + req.body.username + '/' + contract.file;
                 let zencode;
                 let keys;
                 let config;
@@ -255,7 +257,7 @@ router.post('/load/:type', verify, (req, res) => {
                     fileType = 'not found';
             }
             console.log('Determined file type: ' + filetype);
-            const dir = process.cwd() + '/zencode/' + req.body.username;
+            const dir = contractDir + req.body.username;
 
             let returnFileArray = [];
             if (fs.existsSync(dir)) {
@@ -361,7 +363,7 @@ router.post('/update/contract/:index', verify, (req, res) => {
             }
 
             console.log('request contract:');
-            console.log(reqContract);
+            // console.log(reqContract);
 
             console.log('current contract:');
             console.log(userData['contracts'][index]);
@@ -374,7 +376,7 @@ router.post('/update/contract/:index', verify, (req, res) => {
             console.log('updated contract:');
             console.log(userData['contracts'][index]);
 
-            const fileDir = process.cwd() + '/zencode/' + username + '/' + userData['contracts'][index].file;
+            const fileDir = contractDir +'/' + username + '/' + userData['contracts'][index].file;
             const zencode = createFile(fileDir + '.zen', reqContract.zencode);
             const keys = createFile(fileDir + '.keys', reqContract.keys);
             const config = createFile(fileDir + '.conf', reqContract.config);
@@ -416,7 +418,7 @@ router.post('/update/contractfield/:index', verify, (req, res) => {
             userData['contracts'][index] = reqContract.db;
 
             let fileSwitch;
-            const fileDir = process.cwd() + '/zencode/' + username + '/' + userData['contracts'][index].file;
+            const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             if (fs.existsSync(fileDir + '.zen.off')) {
                 createFile(fileDir + '.zen.off', reqContract.zencode);
                 createFile(fileDir + '.keys.off', reqContract.keys);
@@ -470,7 +472,7 @@ router.delete('/delete/contract/:index', verify, (req, res) => {
             }
 
 
-            const fileDir = process.cwd() + '/zencode/' + username + '/' + userData['contracts'][index].file;
+            const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             try {
                 fs.unlinkSync(fileDir + '.zen');
                 fs.unlinkSync(fileDir + '.keys');
@@ -518,7 +520,7 @@ router.post('/contract/switch/:index', verify, (req, res) => {
             }
 
 
-            const fileDir = process.cwd() + '/zencode/' + username + '/' + userData['contracts'][index].file;
+            const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             let responseSwitch;
 
             if (fs.existsSync(fileDir + '.zen.off')) {

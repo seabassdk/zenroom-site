@@ -63,7 +63,9 @@ app.set("json spaces", 2);
 
 app.use(db.default);
 app.use("/docs/:user", ui);
-app.use("/api/*", zencode.default);
+app.use("/api/*", zencode.default, (req, res)=>{
+  res.send('testing');
+});
 
 
 
@@ -102,10 +104,10 @@ app.use("/api/*", zencode.default);
 //   next();
 //   });
 
-//for development only:
+// for development only:
 app.use(cors());
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "http://localhost:3010"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
   next();

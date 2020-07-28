@@ -31,10 +31,12 @@ To add new endpoints you should add new zencode contracts in the directory.
       url: "{protocol}://{host}/{basePath}",
       variables: {
         port: {
-          enum: [HTTP_PORT, HTTPS_PORT],
-          default: HTTPS_PORT,
+          // enum: [HTTP_PORT, HTTPS_PORT],
+          enum: [HTTPS_PORT],
+          // default: HTTPS_PORT,
         },
-        protocol: { enum: ["http", "https"], default: "https" },
+        // protocol: { enum: ["http", "https"], default: "https" },
+        protocol: { enum: ["https"] },
         host: { default: HOST },
         basePath: { default: "api" },
       },
