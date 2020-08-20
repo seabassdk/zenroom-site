@@ -478,10 +478,12 @@ router.delete('/delete/contract/:index', verify, (req, res) => {
                 fs.unlinkSync(fileDir + '.keys');
                 fs.unlinkSync(fileDir + '.conf');
             } catch (error) {
-                console.log('caught error while deleting');
+                console.log('caught error while deleting contract files');
             }
 
-            userData['contracts'].splice(index);
+            const indexInt = parseInt(index);
+            const newContracts = userData['contracts'].filter((contract, i) => i !== indexInt); 
+            userData['contracts'] = newContracts;
 
             userData.save((err) => {
                 if (err) {
