@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@restroom-mw/core": "^0.4.0",
+    "@restroom-mw/core": "^0.4.1",
     "@restroom-mw/db": "^0.4.0",
     "@restroom-mw/ui": "^0.4.0",
     "bcryptjs": "^2.4.3",
