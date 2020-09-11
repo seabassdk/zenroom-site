@@ -13,9 +13,10 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@restroom-mw/core": "^0.4.1",
+    "@restroom-mw/core": "^0.4.2",
     "@restroom-mw/db": "^0.4.0",
-    "@restroom-mw/ui": "^0.4.0",
+    "@restroom-mw/ui": "^0.4.2",
+    "@restroom-mw/utils": "^0.4.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",
@@ -30,7 +31,8 @@
     "morgan": "^1.10.0",
     "regenerator-runtime": "^0.13.5",
     "rimraf": "^3.0.2",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "zenroom": "^1.1.5-19"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
