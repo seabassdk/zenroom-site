@@ -29,8 +29,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.19",
     "morgan": "^1.10.0",
+    "mysql2": "^2.1.0",
     "regenerator-runtime": "^0.13.5",
     "rimraf": "^3.0.2",
+    "sqlite3": "^5.0.0",
     "swagger-ui-express": "^4.1.4",
     "zenroom": "^1.1.5-19"
   },
