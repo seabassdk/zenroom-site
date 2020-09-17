@@ -33,6 +33,7 @@
     "regenerator-runtime": "^0.13.5",
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.0",
+    "tedious": "^9.2.1",
     "swagger-ui-express": "^4.1.4",
     "zenroom": "^1.1.5-19"
   },
