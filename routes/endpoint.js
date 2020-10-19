@@ -17,7 +17,7 @@ export default (req, res, next) => {
   let outputName = 'output';
   let outputValue;
 
-  //get the url api call from restroom that contains username and contract name
+  //get the api call from restroom that contains username and contract name
   const originalUrl = rr._req.originalUrl;
   const userContractDir = originalUrl.split('/api/')[1];
 
@@ -38,7 +38,7 @@ export default (req, res, next) => {
 
       if (externalSourceKeys.length > 0) {
 
-        //if exists get the value for the external source in the keys or data files with the externalSourceKey key
+        //if exists get the value for the external source in the keys or data files that have the externalSourceKey key
         if (fs.existsSync(keyFile)) {
           const keyFileContent = JSON.parse(fs.readFileSync(keyFile).toString());
           for (const key of externalSourceKeys) {
@@ -46,6 +46,7 @@ export default (req, res, next) => {
             const value = getValueForKey(keyFileContent, key);
             if (value) {
               try {
+                // make the api call with url in value
                 const response = await axios.get(value);
                 outputValue = response.data;
               } catch (error) {
