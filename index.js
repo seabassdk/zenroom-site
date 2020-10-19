@@ -50,7 +50,7 @@ app.use('/data', userDataRoute);
 app.use(express.static('./build'));
 
 app.get('*', (req, res) => {
-  // res.sendFile(path.join('./build', 'index.html'));
+//  res.sendFile(path.join('./build', 'index.html'));
   res.sendFile('./build/index.html', { root: '.' });
 });
 
