@@ -108,10 +108,6 @@ router.post('/save/:type', verify, async (req, res) => {
     const userId = req.body.userId;
     const dataType = req.params.type;
 
-    console.log('Saving type: ', dataType);
-    console.log('Saving content', content);
-    console.log('with id: ', userId);
-
     try {
         // const user= await UserData.findOne({ 'userId': req.body.userId });
         // console.log('the found user: ');
@@ -122,8 +118,6 @@ router.post('/save/:type', verify, async (req, res) => {
                 console.log('ERROR RETRIEVING CONTRACTS');
                 return res.status(400).send('Could not retrieve contracts.');
             }
-
-            console.log('found user data.. ');
             // console.log(userData);
             const item = { content: JSON.stringify(content), name };
             switch (dataType) {
@@ -203,12 +197,9 @@ router.post('/load/contracts', verify, (req, res) => {
                     config = fs.readFileSync(fileDir + '.conf').toString();
                     fileSwitch = 'on';
                 }
-                console.log('contract switch: ' + fileSwitch);
                 responseArray.push({ db: contract, zencode, keys, config, switch: fileSwitch });
             });
 
-            console.log('sending contracts:');
-            // console.log(contracts);
             res.status(200).send(responseArray);
 
         });
@@ -312,8 +303,6 @@ router.post('/update/:type/:index/:field', verify, (req, res) => {
     if (!content)
         res.status(500).send('Nothing to save...');
 
-    console.log('updating type: ' + type + ' with index: ' + index);
-
     try {
         UserData.findOne({ 'username': req.body.username }, async (err, userData) => {
             if (err) {
@@ -348,8 +337,6 @@ router.post('/update/contract/:index', verify, (req, res) => {
 
     if (!reqContract)
         res.status(501).send('Nothing to save...');
-
-    console.log('updating contract with index: ' + index);
 
     try {
         UserData.findOne({ 'username': username }, async (err, userData) => {
@@ -557,10 +544,8 @@ const readFile = (filePath) => {
 const createFile = (filePath, fileContent) => {
     fs.writeFileSync(filePath, fileContent, (error) => {
         if (error) {
-            console.error('An error occurred: ', error);
             return false;
         } else {
-            console.log('Your file has been created.');
             return true;
         }
     });
@@ -571,9 +556,6 @@ const createDir = (dirPath) => {
         if (error) {
             console.error('An error occurred: ', error);
             return false;
-        } else {
-            console.log('Your directory is created!');
-
         }
     });
 }
