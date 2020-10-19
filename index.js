@@ -15,7 +15,7 @@ import authRoute from './routes/auth.js';
 import userDataRoute from './routes/userData.js';
 import swagRoute from './routes/swag.js';
 
-import endpoint from './routes/endpoint.js';
+
 
 const app = express();
 
@@ -37,7 +37,6 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.set("json spaces", 2);
 
-app.use(endpoint);
 app.use(db.default);
 app.use("/docs/:user", ui);
 app.use("/api/*", zencode.default);
