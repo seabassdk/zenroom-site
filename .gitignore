@@ -2,3 +2,4 @@ node_modules
 .env
 zencode
 contracts
+package-lock.json
