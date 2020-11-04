@@ -36,7 +36,7 @@
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.0",
     "swagger-ui-express": "^4.1.4",
-    "zenroom": "^1.1.5-6032202"
+    "zenroom": "^1.1.5-a76c722"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
