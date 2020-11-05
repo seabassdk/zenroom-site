@@ -13,7 +13,7 @@ import db from "@restroom-mw/db";
 import ui from "./ui/index.js";
 import authRoute from './routes/auth.js';
 import userDataRoute from './routes/userData.js';
-import swagRoute from './routes/swag.js';
+import dockerRoute from './routes/docker.js';
 
 
 
@@ -45,6 +45,7 @@ app.use("/api/*", zencode.default);
 //Route middleware
 app.use('/user', authRoute);
 app.use('/data', userDataRoute);
+app.use('/docker', dockerRoute);
 
 app.use(express.static('./build'));
 
