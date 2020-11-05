@@ -4,13 +4,14 @@ FROM node:14
 
 RUN npx degit dyne/restroom-template restroom-mw
 
+RUN apt-get update
+RUN apt-get install nano
 # RUN apk add git 
 # RUN git clone https://github.com/dyne/restroom-template restroom-mw
 # RUN rm -rf ./restroom-mw/.git/
 # RUN apt install npm -y
 
 WORKDIR /restroom-mw
-
 
 EXPOSE 3300 
 EXPOSE 3301 

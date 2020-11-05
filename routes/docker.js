@@ -15,13 +15,13 @@ router.post('/', verify, (req, res) => {
     if (fs.existsSync(process.cwd() + '/dockerfile')) {
         console.log('file exists');
         try {
-            // read contents of the file
+            // read contents of the dockerfile
             const data = fs.readFileSync(process.cwd() + '/dockerfile').toString();
 
-            // split the contents by new line
+            // split the contents by new line of dockerfile
             const lines = data.split(/\r?\n/);
 
-            // print all lines
+            // loop all lines of dockerfile
             lines.forEach((line) => {
 
                 if (line.includes('Adding exported contracts')) {
@@ -37,31 +37,48 @@ router.post('/', verify, (req, res) => {
                         let fileDir = contractsDir + contractName
                         if (fs.existsSync(fileDir + '.zen')) {
                             zencode = fs.readFileSync(fileDir + '.zen').toString();
-                            zencode = zencode.replace(/'/g, "\\'");
-                            zencode = zencode.replace(/(?:\r\n|\r|\n)/g, '\\n\\');
+                            zencode = zencode.replace(/(?:\r\n|\r|\n)/g, '\\n');
 
-                            docker = docker + "RUN echo -e $'" + zencode + "'\\\n";
-                            docker = docker + "> ./zencode/" + contractName + ".zen\n";
+                            docker = docker + 'RUN echo \"' + zencode + '\"> ./zencode/' + contractName + '.zen';
                             docker = docker + '\n';
-
                         }
                         if (fs.existsSync(fileDir + '.keys')) {
                             keys = fs.readFileSync(fileDir + '.keys').toString();
-                            docker = docker + "RUN echo $'" + keys + "'\\\n";
-                            docker = docker + "> ./zencode/" + contractName + ".keys\n";
-                            docker = docker + '\n';
+                            if (keys) {
+                                try {
+                                    if (typeof keys === 'string') {
+                                        keys = JSON.stringify(JSON.parse(keys));
+                                    } else {
+                                        keys = JSON.stringify(keys);
+                                    }
+                                } catch {
+                                    console.log('Error in converting keys json');
+                                }
+                                docker = docker + "RUN echo '" + keys + "' > ./zencode/" + contractName + ".keys";
+                                docker = docker + '\n';
+                            }
+                            
                         }
                         if (fs.existsSync(fileDir + '.conf')) {
                             config = fs.readFileSync(fileDir + '.conf').toString();
-                            docker = docker + "RUN echo $'" + config + "'\\\n";
-                            docker = docker + "> ./zencode/" + contractName + ".conf\n";
-                            docker = docker + '\n';
+                            if (config) {
+                                try {
+                                    if (typeof config === 'string') {
+                                        config = JSON.stringify(JSON.parse(config));
+                                    } else {
+                                        config = JSON.stringify(config);
+                                    }
+                                } catch {
+                                    console.log('Error in converting keys json');
+                                }
+                                docker = docker + "RUN echo '" + config + "'> ./zencode/" + contractName + ".conf";
+                                docker = docker + '\n';
+                            }
                         }
 
                     });
                 } else {
                     docker = docker + line + '\n';
-                    console.log('.');
                 }
 
             });

@@ -161,6 +161,7 @@ router.post('/load/contracts', verify, (req, res) => {
                 return res.status(400).send('Could not retrieve contracts.');
             }
             if (!userData) {
+                console.log('No contracts found for username: ' + req.body.username );
                 return res.status(400).send('No contracts found for ' + req.body.username);
             }
 
