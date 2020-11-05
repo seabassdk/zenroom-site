@@ -1,6 +1,5 @@
 import express from 'express';
 import fs from 'fs';
-import lineReader from 'line-reader';
 import verify from '../validation/verifyToken.js';
 
 const router = express.Router({ mergeParams: true });
@@ -73,33 +72,6 @@ router.post('/', verify, (req, res) => {
     } else {
         console.log('file does NOT exist');
     }
-
-
-
-    // console.log('Going in reader');
-    // lineReader.eachLine('./dockerfile', line => {
-    //     // console.log('appending: ' + line + '\n');
-    //     docker = docker + line + '\n';
-    //     // if (line.includes('STOP') {
-    //     //     return false; // stop reading
-    //     // }
-    //     console.log('.');
-    // });
-
-
-
-    //CONTRACT CONTENTS
-    // const fileDir = contractDir + req.body.username + '/' + req.body.contracts[0];
-
-    // let zencode = 'empty';
-    // console.log('The file dir: ');
-    // console.log(fileDir);
-    // if (fs.existsSync(fileDir + '.zen')) {
-    //     console.log('file exists');
-    //     zencode = fs.readFileSync(fileDir + '.zen').toString();
-    // } else {
-    //     console.log('file does NOT exist');
-    // }
 
     console.log('SENDING DOCKER');
     res.send(docker);
