@@ -38,22 +38,22 @@ router.post('/', verify, (req, res) => {
                         if (fs.existsSync(fileDir + '.zen')) {
                             zencode = fs.readFileSync(fileDir + '.zen').toString();
                             zencode = zencode.replace(/'/g, "\\'");
-                            zencode = zencode.replace(/(?:\r\n|\r|\n)/g, '\\n');
+                            zencode = zencode.replace(/(?:\r\n|\r|\n)/g, '\\n\\');
 
-                            docker = docker + "RUN echo -e '" + zencode + "\n'";
+                            docker = docker + "RUN echo -e $'" + zencode + "'\\\n";
                             docker = docker + "> ./zencode/" + contractName + ".zen\n";
                             docker = docker + '\n';
 
                         }
                         if (fs.existsSync(fileDir + '.keys')) {
                             keys = fs.readFileSync(fileDir + '.keys').toString();
-                            docker = docker + "RUN echo '" + keys + "\n'";
+                            docker = docker + "RUN echo $'" + keys + "'\\\n";
                             docker = docker + "> ./zencode/" + contractName + ".keys\n";
                             docker = docker + '\n';
                         }
                         if (fs.existsSync(fileDir + '.conf')) {
                             config = fs.readFileSync(fileDir + '.conf').toString();
-                            docker = docker + "RUN echo '" + config + "\n'";
+                            docker = docker + "RUN echo $'" + config + "'\\\n";
                             docker = docker + "> ./zencode/" + contractName + ".conf\n";
                             docker = docker + '\n';
                         }
