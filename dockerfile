@@ -1,12 +1,12 @@
 # Importing node14 docker image
 FROM node:14
 
-# Installing restroom
-RUN npx degit dyne/restroom-template restroom-mw
-
 # Install nano for debug
 RUN apt-get update
 RUN apt-get install nano
+
+# Installing restroom
+RUN npx degit dyne/restroom-template restroom-mw
 
 # setup docker
 WORKDIR /restroom-mw
