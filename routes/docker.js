@@ -7,13 +7,10 @@ const router = express.Router({ mergeParams: true });
 const contractDir = process.env.ZENCODE_DIR + '/';
 
 router.post('/', verify, (req, res) => {
-    //Lets validate the data before we add a user
-    console.log('received contracts:');
-    console.log(req.body.contracts);
 
     let docker = '';
     if (fs.existsSync(process.cwd() + '/dockerfile')) {
-        console.log('file exists');
+
         try {
             // read contents of the dockerfile
             const data = fs.readFileSync(process.cwd() + '/dockerfile').toString();
@@ -26,7 +23,7 @@ router.post('/', verify, (req, res) => {
 
                 if (line.includes('Adding exported contracts')) {
                     docker = docker + line + '\n';
-                    console.log('ADD EXPORTED CONTRACTS HERE.');
+
                     let zencode;
                     let keys;
                     let config;
@@ -90,7 +87,6 @@ router.post('/', verify, (req, res) => {
         console.log('file does NOT exist');
     }
 
-    console.log('SENDING DOCKER');
     res.send(docker);
 
 })

@@ -1,45 +1,41 @@
+# Importing node14 docker image
 FROM node:14
-# FROM dyne/devuan:beowulf
-# FROM mhart/alpine-node:14
 
+# Installing restroom
 RUN npx degit dyne/restroom-template restroom-mw
 
+# Install nano for debug
 RUN apt-get update
 RUN apt-get install nano
-# RUN apk add git 
-# RUN git clone https://github.com/dyne/restroom-template restroom-mw
-# RUN rm -rf ./restroom-mw/.git/
-# RUN apt install npm -y
 
+# setup docker
 WORKDIR /restroom-mw
-
 EXPOSE 3300 
 EXPOSE 3301 
 
-# Adding an external file via ADD
-ADD .env ./
-ADD keypairAdded.zen ./zencode
-
-# Adding exported contracts
-
-# Adding a file inline 
-RUN touch env.text
+# Adding the .env file
+RUN touch .env
 RUN echo $'ZENCODE_DIR=/zencode\n\
+CUSTOM_404_MESSAGE=nothing to see here\n\
 HTTP_PORT=3300\n\
 HTTPS_PORT=3301\n'\
->> /restroom-mw/env.text
+>> /restroom-mw/.env
 
+# Adding the exported files
+RUN echo "Adding exported contracts from apiroom"
 
 # Debugging lines
 RUN ls -al
 RUN cat .env
 RUN ls -al ./zencode
-RUN cat env.text
+RUN cat .env
 
-
+# npm install and run
 run npm i
 run npm i fuzzball
 run npm run start
+
+
 
 
  
