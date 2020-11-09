@@ -14,10 +14,10 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@hapi/joi": "^17.1.1",
-    "@restroom-mw/core": "^0.5.0",
-    "@restroom-mw/db": "^0.5.0",
-    "@restroom-mw/ui": "^0.5.0",
-    "@restroom-mw/utils": "^0.5.0",
+    "@restroom-mw/core": "^0.6.2",
+    "@restroom-mw/db": "^0.6.1",
+    "@restroom-mw/ui": "^0.6.1",
+    "@restroom-mw/utils": "^0.6.1",
     "axios": "^0.20.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -36,7 +36,7 @@
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.0",
     "swagger-ui-express": "^4.1.4",
-    "zenroom": "^1.1.5-a76c722"
+    "zenroom": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
