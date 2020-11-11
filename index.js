@@ -8,6 +8,7 @@ import morgan from 'morgan';
 
 import zencode from "@restroom-mw/core";
 import db from "@restroom-mw/db";
+import http from "@restroom-mw/http";
 
 
 import ui from "./ui/index.js";
@@ -38,6 +39,7 @@ app.use(morgan("dev"));
 app.set("json spaces", 2);
 
 app.use(db.default);
+app.use(http.default);
 app.use("/docs/:user", ui);
 app.use("/api/*", zencode.default);
 
