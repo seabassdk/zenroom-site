@@ -31,8 +31,8 @@ RUN ls -al ./zencode
 RUN cat .env
 
 # yarn install and run
-run yarn
-run yarn start
+RUN yarn
+CMD yarn start
 
 
 
