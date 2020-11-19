@@ -30,10 +30,9 @@ RUN cat .env
 RUN ls -al ./zencode
 RUN cat .env
 
-# npm install and run
-run npm i
-# run npm i fuzzball
-run npm run start
+# yarn install and run
+run yarn
+run yarn start
 
 
 
