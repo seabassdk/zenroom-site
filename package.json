@@ -14,9 +14,9 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@hapi/joi": "^17.1.1",
-    "@restroom-mw/core": "^0.7.0",
+    "@restroom-mw/core": "^0.7.1",
     "@restroom-mw/db": "^0.7.0",
-    "@restroom-mw/http": "^0.7.0",
+    "@restroom-mw/http": "^0.7.1",
     "@restroom-mw/ui": "^0.7.0",
     "@restroom-mw/utils": "^0.7.0",
     "axios": "^0.20.0",
@@ -36,7 +36,7 @@
     "regenerator-runtime": "^0.13.5",
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.0",
-    "swagger-ui-express": "^4.1.4",
+    "swagger-ui-express": "^4.1.5",
     "zenroom": "^2.1.0-4e97d09"
   },
   "devDependencies": {
