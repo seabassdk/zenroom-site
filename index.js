@@ -15,6 +15,7 @@ import ui from "./ui/index.js";
 import authRoute from './routes/auth.js';
 import userDataRoute from './routes/userData.js';
 import dockerRoute from './routes/docker.js';
+import zenExposeRoute from './routes/exposeZen.js';
 
 
 
@@ -48,6 +49,7 @@ app.use("/api/*", zencode.default);
 app.use('/user', authRoute);
 app.use('/data', userDataRoute);
 app.use('/docker', dockerRoute);
+app.use('/showme', zenExposeRoute);
 
 app.use(express.static('./build'));
 
