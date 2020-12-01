@@ -49,54 +49,52 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@restroom-mw/core@^0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@restroom-mw/core/-/core-0.7.1.tgz#e201bf451e9ce523e706dbc3eee9d48b912a8152"
-  integrity sha512-UjG5hlfmwCHXilPoa4F36VksspLgy8c1nw/xFWmfSg/vDoBhhOlwr5gZ+plZA8vpM34X0DmUfh6HYALlmVzQMg==
+"@restroom-mw/core@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@restroom-mw/core/-/core-0.8.1.tgz#88bb92bd8afd473bd6084abc41f9ee4ac21ec31e"
+  integrity sha512-NE0XgBtO6GTUtspGvI3Xnon0FynKtXb4BrecWgLudJWAtXn2IuMGO5GlZBjHAhEaRvc2/ZqSQNA1K8xeXaY2qA==
   dependencies:
-    "@restroom-mw/zencode" "^0.7.0"
+    "@restroom-mw/zencode" "^0.8.0"
     fuzzball "^1.3.0"
 
-"@restroom-mw/db@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.npmjs.org/@restroom-mw/db/-/db-0.7.0.tgz"
-  integrity sha512-eYvT/Ux3J0hhVsRqJuiomCDBEWMfGdjvyIwmqxbYcYMB8ZJQFhPnbv1xHaBn9nWYoccX3R8GitdRjv/B6JqLBg==
+"@restroom-mw/db@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@restroom-mw/db/-/db-0.8.1.tgz#60fd8c051221ef295eb633b31eebbcef29e8b18f"
+  integrity sha512-Kca3ueNZCZYUtMyR03XIa8pX+eXulxfh0jaNyiQnc6YbHRd1OgMNDoO8z1nsNA+S11ew5fUwnIknPDu4UzS9sg==
   dependencies:
     sequelize "^5.21.7"
     sqlite3 "^5.0.0"
 
-"@restroom-mw/http@^0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@restroom-mw/http/-/http-0.7.1.tgz#bf3c0fe750dbfc6740d5e6f66b725e4ea5ae3296"
-  integrity sha512-gdMisJ2v4PiD0+96Ywi1ycBnZirToEltmiopcZaLWmtP60X8nrExGqzY/a5ojiC47fXAgpk9LvI0dJIkVUkBoA==
+"@restroom-mw/http@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@restroom-mw/http/-/http-0.8.1.tgz#fd157f0114cacc47ad49ced5a46942fe0a695584"
+  integrity sha512-GlZXOYLbgVojM1R9S3kgRKWVZKOalKgc/jcvNdIE4dABQR9nhglsYxTWXoDmthLM3t65SLUhVs932Ike3BViwA==
   dependencies:
     sequelize "^5.21.7"
     sqlite3 "^5.0.0"
 
-"@restroom-mw/ui@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.npmjs.org/@restroom-mw/ui/-/ui-0.7.0.tgz"
-  integrity sha512-ouM4HIEAwzF/YQVj9zLvAKuwsGy4IWt51ds36SV2++5xk0fn/2ihoEzwXpnL5378nr5WnvbfF0CDmhktJSLrCQ==
+"@restroom-mw/ui@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@restroom-mw/ui/-/ui-0.8.1.tgz#0d96a04cba0568481c8862d70e56ca49cf369f33"
+  integrity sha512-n/ncjnS8vnq/DQ4Gc9+RHwAgqHDU4/VuZAXT0OEzRa9jH/dbQmNhGEDZW5uACpvTMKcDgaEyR49dJZqY4zBhiA==
   dependencies:
-    "@restroom-mw/utils" "^0.7.0"
-    "@restroom-mw/zencode" "^0.7.0"
+    "@restroom-mw/utils" "^0.8.0"
+    "@restroom-mw/zencode" "^0.8.0"
     dotenv "^8.2.0"
     express "^4.17.1"
     swagger-ui-express "^4.1.4"
 
-"@restroom-mw/utils@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.npmjs.org/@restroom-mw/utils/-/utils-0.7.0.tgz"
-  integrity sha512-l9r2FeFpyB6+VkhsZ43qzzGtz5LLj/DJlFVtNkRaMpAMiMFPhp1jYqTZ1IRsvKc4jZAI9BLJ1pNZVH02eOPcig==
+"@restroom-mw/utils@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@restroom-mw/utils/-/utils-0.8.0.tgz#765659a670e5a6d6e5d43d635b26d1bdd1f3e073"
+  integrity sha512-ASajN+1G71diG/Iw+x5zzBTjeJjQqvlCp5vieaJYorqFFdDi8SKFujYCth3bcTG+LtsuMA/3w8pORaFYvREhug==
   dependencies:
     dotenv "^8.2.0"
 
-"@restroom-mw/zencode@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.npmjs.org/@restroom-mw/zencode/-/zencode-0.7.0.tgz"
-  integrity sha512-ORl/yp0nqwLNfZ12GBbcj9qVxKTDMsCVtyrot4EoDl6W6NlI4LU4wztx9TF2DesT0N7sm3Sp48+r404Omtzpgw==
-  dependencies:
-    ignore-case "^0.1.0"
+"@restroom-mw/zencode@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@restroom-mw/zencode/-/zencode-0.8.0.tgz#c29bb3c1542ef7b4fd65b102059c61a361a414d7"
+  integrity sha512-cztu+aCu9DpHNsl5Un6FDCFu6ZchQt3NOOIQFRF1i0iexewO4Nr5QpTr/tDpaO1ZehcE6JZX+YK7U/JZjim2qg==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -1000,11 +998,6 @@ ignore-by-default@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/ignore-by-default/-/ignore-by-default-1.0.1.tgz"
   integrity sha1-SMptcvbGo68Aqa1K5odr44ieKwk=
-
-ignore-case@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/ignore-case/-/ignore-case-0.1.0.tgz"
-  integrity sha1-3Adh5l+wB5vhJQ0g4kWEMr3Apf4=
 
 ignore-walk@^3.0.1:
   version "3.0.3"
