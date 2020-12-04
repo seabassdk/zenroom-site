@@ -54,6 +54,9 @@ app.use('/showme', zenExposeRoute);
 app.use(express.static('./build'));
 
 app.get('*', (req, res) => {
+  if (req.url.startsWith("/api")) {
+    return;
+  }
 //  res.sendFile(path.join('./build', 'index.html'));
   res.sendFile('./build/index.html', { root: '.' });
 });
