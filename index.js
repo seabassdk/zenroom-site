@@ -9,6 +9,7 @@ import morgan from 'morgan';
 import zencode from "@restroom-mw/core";
 import db from "@restroom-mw/db";
 import http from "@restroom-mw/http";
+import sawroom from "@restroom-mw/sawroom";
 
 
 import ui from "./ui/index.js";
@@ -41,6 +42,7 @@ app.set("json spaces", 2);
 
 app.use(db.default);
 app.use(http.default);
+app.use(sawroom.default);
 app.use("/docs/:user", ui);
 app.use("/api/*", zencode.default);
 
@@ -50,6 +52,8 @@ app.use('/user', authRoute);
 app.use('/data', userDataRoute);
 app.use('/docker', dockerRoute);
 app.use('/showme', zenExposeRoute);
+
+
 
 app.use(express.static('./build'));
 
