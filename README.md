@@ -1,1 +1,0 @@
-The sqlite3 might not run if already installed in the computer.

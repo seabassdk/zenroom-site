@@ -3,4 +3,3 @@ node_modules
 zencode
 contracts
 package-lock.json
-yarn.lock
