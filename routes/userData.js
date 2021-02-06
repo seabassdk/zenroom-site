@@ -12,15 +12,12 @@ import UserData from '../model/UserData.js';
 
 const router = express.Router({ mergeParams: true });
 
-const contractDir =  process.cwd() + '/contracts/';
+const contractDir =  process.env.ZENCODE_DIR + '/';
 
 router.post('/save/contract', verify, (req, res) => {
-
-    console.log('Saving contract to db: ');
     //trim the name and replace spaces with dashes
     const name = req.body.name.trim();
-    let fileName = req.body.name.trim();
-    fileName = req.body.name.replace(/ /g, "-");
+    const fileName = name.replace(/ /g, "-");
     const reqContract = {
         name,
         file: fileName,
@@ -33,64 +30,51 @@ router.post('/save/contract', verify, (req, res) => {
     const zencodeDir = userDir + '/' + fileName + '.zen';
     const keysDir = userDir + '/' + fileName + '.keys';
     const configDir = userDir + '/' + fileName + '.conf';
-    console.log('Saving contract for user id:');
-    console.log();
-    console.log(reqContract);
     try {
-        // const contract = new Contract(reqContract);
         UserData.findOne({ 'username': req.body.username }, (err, userData) => {
             if (err)
-                return res.status(500).send('Could not find user! Please contact admin');
+                return res.status(501).send('Could not find user! Please contact admin');
 
             if (nameExists(userData.contracts, name))
-                return res.status(500).send('Contract name already exists');
-
+                return res.status(502).send('Contract name already exists');
 
             userData.contracts.push(reqContract);
-
             userData.save((err) => {
                 if (err) {
                     console.log('Could not save in mongo db. Error: ');
                     console.log(err);
                     return res.status(501).send('Could not save contract in db');
                 }
-
-                // Create directory for saving zencode contract
+                // Create directory
                 if (!fs.existsSync(userDir)) {
                     fs.mkdirSync(userDir, { recursive: true }, (error) => {
                         if (error) {
                             console.error('An error occurred while creating path: ', error);
-                            return res.status(500).send('Could not create directory for file in server.');;
+                            return res.status(503).send('Could not create directory for file in server.');;
                         }
                     });
                 }
-
-                // Create or overwrite file
+                // Create or overwrite files
                 fs.writeFileSync(zencodeDir, reqContract.zencode, (error) => {
                     if (error) {
                         console.error('An error occurred when writing file: ', error);
-                        return res.status(501).send('Could not create file in server.');;
+                        return res.status(503).send('Could not create file in server.');;
                     }
                 });
-
                 fs.writeFileSync(keysDir, reqContract.keys, (error) => {
                     if (error) {
                         console.error('An error occurred when writing file: ', error);
-                        return res.status(501).send('Could not create file in server.');;
+                        return res.status(503).send('Could not create file in server.');;
                     }
                 });
-
                 fs.writeFileSync(configDir, reqContract.config, (error) => {
                     if (error) {
                         console.error('An error occurred when writing file: ', error);
-                        return res.status(501).send('Could not create file in server.');;
+                        return res.status(503).send('Could not create file in server.');;
                     }
                 });
-
                 // return successful response
                 res.status(200).send('Saved contract!');
-
-
             });
         });
 
@@ -105,20 +89,12 @@ router.post('/save/contract', verify, (req, res) => {
 router.post('/save/:type', verify, async (req, res) => {
     const content = req.body.content;
     const name = req.body.name;
-    const userId = req.body.userId;
     const dataType = req.params.type;
-
     try {
-        // const user= await UserData.findOne({ 'userId': req.body.userId });
-        // console.log('the found user: ');
-        // console.log(user);
         UserData.findOne({ 'username': req.body.username }, (err, userData) => {
             //modify and save the object received via callback
-            if (err || !userData) {
-                console.log('ERROR RETRIEVING CONTRACTS');
+            if (err || !userData)
                 return res.status(400).send('Could not retrieve contracts.');
-            }
-            // console.log(userData);
             const item = { content: JSON.stringify(content), name };
             switch (dataType) {
                 case 'zencode':
@@ -139,7 +115,6 @@ router.post('/save/:type', verify, async (req, res) => {
                 default:
                     res.status(500).send('Could not save ' + dataType);
             }
-
             userData.save();
             res.status(200).send('saved ' + dataType);
         });
@@ -150,36 +125,14 @@ router.post('/save/:type', verify, async (req, res) => {
     }
 });
 
-
 router.post('/load/contracts', verify, (req, res) => {
-    console.log('loading contracts...');
-
     try {
         UserData.findOne({ 'username': req.body.username }, (err, userData) => {
-            if (err) {
-                console.log('ERROR RETRIEVING CONTRACTS');
+            if (err)
                 return res.status(400).send('Could not retrieve contracts.');
-            }
-            if (!userData) {
-                console.log('No contracts found for username: ' + req.body.username );
+            if (!userData)
                 return res.status(400).send('No contracts found for ' + req.body.username);
-            }
-
             const contractsArray = userData['contracts'];
-            console.log('found contracts:');
-
-            // const contractsWithFile = contractsArray.map((contract) => {
-            //     console.log('single contract:');
-            //     console.log(contract);
-            //     const fileDir = process.cwd() + '/zencode/' + req.body.userId + '/' + contract.name + '.zen';
-            //     const fileZen = fs.readFileSync(fileDir).toString();
-            //     console.log('adding file:')
-            //     console.log(fileZen);
-            //     return {
-            //         ...contract,
-            //     }
-            // });
-
             const responseArray = [];
             contractsArray.forEach((contract) => {
                 const fileDir = contractDir + req.body.username + '/' + contract.file;
@@ -200,11 +153,8 @@ router.post('/load/contracts', verify, (req, res) => {
                 }
                 responseArray.push({ db: contract, zencode, keys, config, switch: fileSwitch });
             });
-
             res.status(200).send(responseArray);
-
         });
-
     } catch (error) {
         console.log('error finding contracts:');
         console.log(error);
@@ -214,23 +164,16 @@ router.post('/load/contracts', verify, (req, res) => {
 });
 
 router.post('/load/:type', verify, (req, res) => {
-
     const dataType = req.params.type;
-
-    console.log('loading type : ' + dataType);
-    console.log('user name: ' + req.body.username);
-
     try {
         UserData.findOne({ 'username': req.body.username }, async (err, userData) => {
             //modify and save the object received via callback
-            if (err) {
-                console.log('ERROR RETRIEVING CONTRACTS');
+            if (err)
                 return res.status(500).send('Could not retrieve contracts.');
-            }
-            if (!userData) {
-                console.log('NO USER DATA');
+
+            if (!userData)
                 return res.status(404).send('No user data to fetch! (contact admin)');
-            }
+
             let filetype;
             switch (dataType) {
                 case 'zencodes':
@@ -248,12 +191,9 @@ router.post('/load/:type', verify, (req, res) => {
                 default:
                     fileType = 'not found';
             }
-            console.log('Determined file type: ' + filetype);
             const dir = contractDir + req.body.username;
-
             let returnFileArray = [];
             if (fs.existsSync(dir)) {
-                console.log('getting files with type: ' + filetype);
                 //get all the files in the user directory
                 const dirCont = await fs.readdirSync(dir);
                 //filter files to get the requested file type
@@ -264,22 +204,11 @@ router.post('/load/:type', verify, (req, res) => {
                     const content = readFile(dir + '/' + fileName);
                     return { name: fileName, content }
                 });
-                console.log(returnFileArray);
-            } else {
-                console.log('NO FILES FOUND FOR: ' + filetype)
             }
-
-
-
-
-
             const returnTypeArray = userData[dataType];
-
             const returnArray = [...returnTypeArray, ...returnFileArray]
             // const returnArraycontract = 
             if (Array.isArray(returnArray)) {
-                console.log('sending back array:');
-                console.log(returnArray);
                 res.status(200).send(returnArray);
             } else {
                 res.status(500).send(dataType + ' is not of type array (contact admin)');
@@ -331,7 +260,6 @@ router.post('/update/:type/:index/:field', verify, (req, res) => {
 });
 
 router.post('/update/contract/:index', verify, (req, res) => {
-
     const index = req.params.index;
     const reqContract = req.body.contract;
     const username = req.body.username
@@ -341,45 +269,28 @@ router.post('/update/contract/:index', verify, (req, res) => {
 
     try {
         UserData.findOne({ 'username': username }, async (err, userData) => {
-            if (err) {
-                console.log('ERROR RETRIEVING CONTRACTS');
+            if (err) 
                 return res.status(500).send('Error when attempting to retrieve contracts.');
-            }
-            if (!userData) {
-                console.log('NO USER DATA');
+
+            if (!userData)
                 return res.status(404).send('No user data to fetch! (contact admin)');
-            }
-
-            console.log('request contract:');
-            // console.log(reqContract);
-
-            console.log('current contract:');
-            console.log(userData['contracts'][index]);
-
+            
             userData['contracts'][index].zencode = reqContract.zencode;
             userData['contracts'][index].keys = reqContract.keys;
             userData['contracts'][index].data = reqContract.data;
             userData['contracts'][index].config = reqContract.config;
-
-            console.log('updated contract:');
-            console.log(userData['contracts'][index]);
-
             const fileDir = contractDir +'/' + username + '/' + userData['contracts'][index].file;
-            const zencode = createFile(fileDir + '.zen', reqContract.zencode);
-            const keys = createFile(fileDir + '.keys', reqContract.keys);
-            const config = createFile(fileDir + '.conf', reqContract.config);
-
-            const saved = await userData.save();
-
+            createFile(fileDir + '.zen', reqContract.zencode);
+            createFile(fileDir + '.keys', reqContract.keys);
+            createFile(fileDir + '.conf', reqContract.config);
+            await userData.save();
             res.status(200).send({ msg: 'saved ok' });
-
         });
     } catch (error) {
         console.log('There was an error');
         console.log(error);
         res.status(501).send('Could not update contract');
     }
-
 });
 
 //Should update only one field at a time, but for now update all even when only one should change.
@@ -443,23 +354,16 @@ router.post('/update/contractfield/:index', verify, (req, res) => {
 });
 
 router.delete('/delete/contract/:index', verify, (req, res) => {
-
     const index = req.params.index;
     const username = req.body.username;
-    // console.log(req);
-
     try {
         UserData.findOne({ 'username': username }, async (err, userData) => {
-            if (err) {
-                console.log('ERROR RETRIEVING CONTRACTS');
+            if (err)
                 return res.status(500).send('Error when attempting to retrieve contracts.');
-            }
-            if (!userData) {
-                console.log('NO USER DATA');
+            
+            if (!userData)
                 return res.status(404).send('No user data to fetch! (contact admin)');
-            }
-
-
+            
             const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             try {
                 fs.unlinkSync(fileDir + '.zen');
@@ -468,18 +372,12 @@ router.delete('/delete/contract/:index', verify, (req, res) => {
             } catch (error) {
                 console.log('caught error while deleting contract files');
             }
-
             const indexInt = parseInt(index);
             const newContracts = userData['contracts'].filter((contract, i) => i !== indexInt); 
             userData['contracts'] = newContracts;
-
             userData.save((err) => {
-                if (err) {
-                    console.log('Could not save in mongo db. Error: ');
-                    console.log(err);
+                if (err)
                     return res.status(501).send('Could not save contract in db');
-                }
-                console.log('successfully deleted contract.');
                 res.status(200).send('contract deleted');
             });
 
@@ -492,27 +390,19 @@ router.delete('/delete/contract/:index', verify, (req, res) => {
 
 });
 
-
 router.post('/contract/switch/:index', verify, (req, res) => {
     const index = req.params.index;
     const username = req.body.username;
-    // console.log(req);
-
     try {
         UserData.findOne({ 'username': username }, async (err, userData) => {
-            if (err) {
-                console.log('ERROR RETRIEVING CONTRACTS');
+            if (err)
                 return res.status(500).send('Error when attempting to retrieve contracts.');
-            }
-            if (!userData) {
-                console.log('NO USER DATA');
-                return res.status(404).send('No user data to fetch! (contact admin)');
-            }
 
+            if (!userData)
+                return res.status(404).send('No user data to fetch! (contact admin)');
 
             const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             let responseSwitch;
-
             if (fs.existsSync(fileDir + '.zen.off')) {
                 fs.renameSync(fileDir + '.zen.off', fileDir + '.zen');
                 fs.renameSync(fileDir + '.keys.off', fileDir + '.keys');
@@ -524,9 +414,7 @@ router.post('/contract/switch/:index', verify, (req, res) => {
                 fs.renameSync(fileDir + '.conf', fileDir + '.conf.off');
                 responseSwitch = 'off';
             }
-
             res.status(200).send(responseSwitch);
-
         });
     } catch (error) {
         console.log('There was an error');
