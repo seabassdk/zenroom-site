@@ -12,7 +12,7 @@ import UserData from '../model/UserData.js';
 
 const router = express.Router({ mergeParams: true });
 
-const contractDir =  process.env.ZENCODE_DIR + '/';
+const contractDir = process.env.ZENCODE_DIR + '/';
 
 router.post('/save/contract', verify, (req, res) => {
     //trim the name and replace spaces with dashes
@@ -55,24 +55,27 @@ router.post('/save/contract', verify, (req, res) => {
                     });
                 }
                 // Create or overwrite files
-                fs.writeFileSync(zencodeDir, reqContract.zencode, (error) => {
-                    if (error) {
-                        console.error('An error occurred when writing file: ', error);
-                        return res.status(503).send('Could not create file in server.');;
-                    }
-                });
-                fs.writeFileSync(keysDir, reqContract.keys, (error) => {
-                    if (error) {
-                        console.error('An error occurred when writing file: ', error);
-                        return res.status(503).send('Could not create file in server.');;
-                    }
-                });
-                fs.writeFileSync(configDir, reqContract.config, (error) => {
-                    if (error) {
-                        console.error('An error occurred when writing file: ', error);
-                        return res.status(503).send('Could not create file in server.');;
-                    }
-                });
+                reqContract.zencode &&
+                    fs.writeFileSync(zencodeDir, reqContract.zencode, (error) => {
+                        if (error) {
+                            console.error('An error occurred when writing file: ', error);
+                            return res.status(503).send('Could not create file in server.');;
+                        }
+                    });
+                reqContract.keys &&
+                    fs.writeFileSync(keysDir, reqContract.keys, (error) => {
+                        if (error) {
+                            console.error('An error occurred when writing file: ', error);
+                            return res.status(503).send('Could not create file in server.');;
+                        }
+                    });
+                reqContract.config &&
+                    fs.writeFileSync(configDir, reqContract.config, (error) => {
+                        if (error) {
+                            console.error('An error occurred when writing file: ', error);
+                            return res.status(503).send('Could not create file in server.');;
+                        }
+                    });
                 // return successful response
                 res.status(200).send('Saved contract!');
             });
@@ -141,14 +144,14 @@ router.post('/load/contracts', verify, (req, res) => {
                 let config;
                 let fileSwitch;
                 if (fs.existsSync(fileDir + '.zen.off')) {
-                    zencode = fs.readFileSync(fileDir + '.zen.off').toString();
-                    keys = fs.readFileSync(fileDir + '.keys.off').toString();
-                    config = fs.readFileSync(fileDir + '.conf.off').toString();
+                    zencode = getFileContent(fileDir + '.zen.off');
+                    keys = getFileContent(fileDir + '.keys.off');
+                    config = getFileContent(fileDir + '.conf.off');
                     fileSwitch = 'off';
                 } else {
-                    zencode = fs.readFileSync(fileDir + '.zen').toString();
-                    keys = fs.readFileSync(fileDir + '.keys').toString();
-                    config = fs.readFileSync(fileDir + '.conf').toString();
+                    zencode = getFileContent(fileDir + '.zen');
+                    keys = getFileContent(fileDir + '.keys');
+                    config = getFileContent(fileDir + '.conf');
                     fileSwitch = 'on';
                 }
                 responseArray.push({ db: contract, zencode, keys, config, switch: fileSwitch });
@@ -162,6 +165,12 @@ router.post('/load/contracts', verify, (req, res) => {
     }
 
 });
+
+const getFileContent = (dir) => {
+    return (fs.existsSync(dir))
+        ? fs.readFileSync(dir).toString()
+        : ''
+}
 
 router.post('/load/:type', verify, (req, res) => {
     const dataType = req.params.type;
@@ -213,7 +222,6 @@ router.post('/load/:type', verify, (req, res) => {
             } else {
                 res.status(500).send(dataType + ' is not of type array (contact admin)');
             }
-
         });
     } catch (error) {
         console.log('There was an error');
@@ -269,20 +277,20 @@ router.post('/update/contract/:index', verify, (req, res) => {
 
     try {
         UserData.findOne({ 'username': username }, async (err, userData) => {
-            if (err) 
+            if (err)
                 return res.status(500).send('Error when attempting to retrieve contracts.');
 
             if (!userData)
                 return res.status(404).send('No user data to fetch! (contact admin)');
-            
+
             userData['contracts'][index].zencode = reqContract.zencode;
             userData['contracts'][index].keys = reqContract.keys;
             userData['contracts'][index].data = reqContract.data;
             userData['contracts'][index].config = reqContract.config;
-            const fileDir = contractDir +'/' + username + '/' + userData['contracts'][index].file;
-            createFile(fileDir + '.zen', reqContract.zencode);
-            createFile(fileDir + '.keys', reqContract.keys);
-            createFile(fileDir + '.conf', reqContract.config);
+            const fileDir = contractDir + '/' + username + '/' + userData['contracts'][index].file;
+            createOrDeleteFile(fileDir + '.zen', reqContract.zencode);
+            createOrDeleteFile(fileDir + '.keys', reqContract.keys);
+            createOrDeleteFile(fileDir + '.conf', reqContract.config);
             await userData.save();
             res.status(200).send({ msg: 'saved ok' });
         });
@@ -319,15 +327,15 @@ router.post('/update/contractfield/:index', verify, (req, res) => {
             let fileSwitch;
             const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             if (fs.existsSync(fileDir + '.zen.off')) {
-                createFile(fileDir + '.zen.off', reqContract.zencode);
-                createFile(fileDir + '.keys.off', reqContract.keys);
-                createFile(fileDir + '.conf.off', reqContract.config);
-                fileSwitch='off';
+                createOrDeleteFile(fileDir + '.zen.off', reqContract.zencode);
+                createOrDeleteFile(fileDir + '.keys.off', reqContract.keys);
+                createOrDeleteFile(fileDir + '.conf.off', reqContract.config);
+                fileSwitch = 'off';
             } else {
-                createFile(fileDir + '.zen', reqContract.zencode);
-                createFile(fileDir + '.keys', reqContract.keys);
-                createFile(fileDir + '.conf', reqContract.config);
-                fileSwitch='on';
+                createOrDeleteFile(fileDir + '.zen', reqContract.zencode);
+                createOrDeleteFile(fileDir + '.keys', reqContract.keys);
+                createOrDeleteFile(fileDir + '.conf', reqContract.config);
+                fileSwitch = 'on';
             }
 
 
@@ -360,10 +368,10 @@ router.delete('/delete/contract/:index', verify, (req, res) => {
         UserData.findOne({ 'username': username }, async (err, userData) => {
             if (err)
                 return res.status(500).send('Error when attempting to retrieve contracts.');
-            
+
             if (!userData)
                 return res.status(404).send('No user data to fetch! (contact admin)');
-            
+
             const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             try {
                 fs.unlinkSync(fileDir + '.zen');
@@ -373,7 +381,7 @@ router.delete('/delete/contract/:index', verify, (req, res) => {
                 console.log('caught error while deleting contract files');
             }
             const indexInt = parseInt(index);
-            const newContracts = userData['contracts'].filter((contract, i) => i !== indexInt); 
+            const newContracts = userData['contracts'].filter((contract, i) => i !== indexInt);
             userData['contracts'] = newContracts;
             userData.save((err) => {
                 if (err)
@@ -404,14 +412,14 @@ router.post('/contract/switch/:index', verify, (req, res) => {
             const fileDir = contractDir + username + '/' + userData['contracts'][index].file;
             let responseSwitch;
             if (fs.existsSync(fileDir + '.zen.off')) {
-                fs.renameSync(fileDir + '.zen.off', fileDir + '.zen');
-                fs.renameSync(fileDir + '.keys.off', fileDir + '.keys');
-                fs.renameSync(fileDir + '.conf.off', fileDir + '.conf');
+                fs.existsSync(fileDir + '.zen.off') && fs.renameSync(fileDir + '.zen.off', fileDir + '.zen');
+                fs.existsSync(fileDir + '.keys.off') && fs.renameSync(fileDir + '.keys.off', fileDir + '.keys');
+                fs.existsSync(fileDir + '.conf.off') && fs.renameSync(fileDir + '.conf.off', fileDir + '.conf');
                 responseSwitch = 'on';
             } else {
-                fs.renameSync(fileDir + '.zen', fileDir + '.zen.off');
-                fs.renameSync(fileDir + '.keys', fileDir + '.keys.off');
-                fs.renameSync(fileDir + '.conf', fileDir + '.conf.off');
+                fs.existsSync(fileDir + '.zen') && fs.renameSync(fileDir + '.zen', fileDir + '.zen.off');
+                fs.existsSync(fileDir + '.keys') && fs.renameSync(fileDir + '.keys', fileDir + '.keys.off');
+                fs.existsSync(fileDir + '.conf') && fs.renameSync(fileDir + '.conf', fileDir + '.conf.off');
                 responseSwitch = 'off';
             }
             res.status(200).send(responseSwitch);
@@ -430,14 +438,17 @@ const readFile = (filePath) => {
     return content;
 }
 
-const createFile = (filePath, fileContent) => {
-    fs.writeFileSync(filePath, fileContent, (error) => {
-        if (error) {
-            return false;
-        } else {
-            return true;
-        }
-    });
+const createOrDeleteFile = (filePath, fileContent) => {
+    if (fileContent) {
+        fs.writeFileSync(filePath, fileContent, (error) => {
+            if (error) throw error;
+        })
+    } else {
+        fs.existsSync(filePath) &&
+            fs.unlinkSync(filePath, (error) => {
+                if (error) throw error;
+            })
+    }
 }
 
 const createDir = (dirPath) => {

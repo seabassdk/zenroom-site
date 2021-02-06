@@ -15,6 +15,8 @@ import authRoute from './routes/auth.js';
 import userDataRoute from './routes/userData.js';
 import dockerRoute from './routes/docker.js';
 import zenExposeRoute from './routes/exposeZen.js';
+import restRoomScriptRoute from './routes/rrScript.js';
+import exportContracts from './routes/exportContracts.js';
 
 const app = express();
 
@@ -41,13 +43,15 @@ app.use(sawroom.default);
 app.use("/docs/:user", ui);
 app.use("/api/*", zencode.default);
 
-
 //Apiroom middleware
 app.use('/user', authRoute);
 app.use('/data', userDataRoute);
 app.use('/docker', dockerRoute);
 app.use('/showme', zenExposeRoute);
+app.use('/rrscript', restRoomScriptRoute);
+app.use('/exportcontracts', exportContracts);
 
+//website hosting
 app.use(express.static('./build'));
 app.get('*', (req, res) => {
     if (req.url.startsWith("/api")) {
