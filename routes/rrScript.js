@@ -8,37 +8,47 @@ const contractDir = process.env.ZENCODE_DIR + '/';
 
 router.post('/', verify, (req, res) => {
 
-    let docker = '';
+    let rrscript = '';
     if (fs.existsSync(process.cwd() + '/exportRestroom.sh')) {
 
         try {
             // read contents of the file
             const data = fs.readFileSync(process.cwd() + '/exportRestroom.sh').toString();
 
-            // split the contents by new line of dockerfile
+            // split the contents by new line of exportRestroom.sh
             const lines = data.split(/\r?\n/);
 
-            // loop all lines of dockerfile
+            // loop all lines of exportRestroom.sh
             lines.forEach((line) => {
 
                 if (line.includes('Adding exported contracts')) {
-                    docker = docker + line + '\n';
+                    rrscript = rrscript + line + '\n';
 
                     let zencode;
                     let keys;
                     let config;
 
                     const contractsDir = contractDir + req.body.username + '/';
-
+                    rrscript = rrscript + '\n';
+                    if(req.body.contracts.length && req.body.contracts.length === 0){
+                        rrscript = rrscript + "echo NO CONTRACTS EXPORTED FROM APIROOM!"
+                        rrscript = rrscript + '\n';
+                    }
+                    rrscript = rrscript + 'echo Creating directory \"./zencode/' + req.body.username  + '/\"'
+                    rrscript = rrscript + '\n';
+                    rrscript = rrscript + 'mkdir -p "./zencode/' +  req.body.username + '"\n';
+                    rrscript = rrscript + '\n';
                     req.body.contracts.forEach(contractName => {
                         let fileDir = contractsDir + contractName
                         if (fs.existsSync(fileDir + '.zen')) {
                             zencode = fs.readFileSync(fileDir + '.zen').toString();
                             // zencode = zencode.replace(/(?:\r\n|\r|\n)/g, '\\n');
-
-                            docker = docker + 'echo \"' + zencode + '\"> ./zencode/' + req.body.username + '/' + contractName + '.zen';
-                            // docker = docker + "echo '" + zencode + "' > ./zencode/ "+ req.body.username + "/" + contractName + ".zen";
-                            docker = docker + '\n';
+                            rrscript = rrscript + 'echo Creating file \"' + contractName + '.zen\":'
+                            rrscript = rrscript + '\n';
+                            rrscript = rrscript + 'echo \"' + zencode + '\"> ./zencode/' + req.body.username + '/' + contractName + '.zen';
+                            // rrscript = rrscript + "echo '" + zencode + "' > ./zencode/ "+ req.body.username + "/" + contractName + ".zen";
+                            rrscript = rrscript + '\n';
+                            rrscript = rrscript + '\n';
                         }
                         if (fs.existsSync(fileDir + '.keys')) {
                             keys = fs.readFileSync(fileDir + '.keys').toString();
@@ -52,8 +62,11 @@ router.post('/', verify, (req, res) => {
                                 } catch {
                                     console.log('Error in converting keys json');
                                 }
-                                docker = docker + "echo '" + keys + "' > ./zencode/" + req.body.username + "/" + contractName + ".keys";
-                                docker = docker + '\n';
+                                rrscript = rrscript + 'echo Creating file \"' + contractName + '.keys\":'
+                                rrscript = rrscript + '\n';
+                                rrscript = rrscript + "echo '" + keys + "' > ./zencode/" + req.body.username + "/" + contractName + ".keys";
+                                rrscript = rrscript + '\n';
+                                rrscript = rrscript + '\n';
                             }
                             
                         }
@@ -69,14 +82,17 @@ router.post('/', verify, (req, res) => {
                                 } catch {
                                     console.log('Error in converting keys json');
                                 }
-                                docker = docker + "echo '" + config + "' > ./zencode/" + req.body.username + "/" + contractName + ".conf";
-                                docker = docker + '\n';
+                                rrscript = rrscript + 'echo Creating file \"' + contractName + '.conf\":'
+                                rrscript = rrscript + '\n';
+                                rrscript = rrscript + "echo '" + config + "' > ./zencode/" + req.body.username + "/" + contractName + ".conf";
+                                rrscript = rrscript + '\n';
+                                rrscript = rrscript + '\n';
                             }
                         }
 
                     });
                 } else {
-                    docker = docker + line + '\n';
+                    rrscript = rrscript + line + '\n';
                 }
 
             });
@@ -88,7 +104,7 @@ router.post('/', verify, (req, res) => {
         console.log('file does NOT exist');
     }
 
-    res.send(docker);
+    res.send(rrscript);
 
 })
 
