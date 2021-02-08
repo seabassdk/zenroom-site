@@ -1,4 +1,9 @@
-echo "   "
+# echo "${red}red text ${green}green text${reset}"
+red=`tput setaf 1`
+green=`tput setaf 2`
+reset=`tput sgr0`
+
+echo "${reset} "
 echo "   "
 echo "Make sure you have node 10 or above installed, the version you have is" 
 echo "   "
@@ -18,11 +23,11 @@ HTTP_PORT=3300
 HTTPS_PORT=3301' > .env
 
 
-
-
 # Adding the exported files
 echo "   "
 echo "Adding exported contracts from apiroom"
+
+
 
 
 
@@ -31,30 +36,26 @@ echo "   "
 echo "Finished exporting contracts from apiroom"
 echo "   "
 
-# Debugging lines
+# Debbing
 echo "   "
 echo "Printing the .env file:"
 echo "   "
 cat .env
+
+# instructions 
 echo "   "
-echo "   "
-echo "  DONE  "
-echo "   "
+echo "${reset} "
+echo "${green} ALL DONE  "
+echo "${reset} "
 echo "   "
 echo "To install restroom-mw type:"
 echo "   "
-echo "yarn"
-echo "   "
+echo "${red}cd restroom-mw"
+echo "${reset} "
+echo "${red}yarn"
+echo "${reset} "
 echo "To launch restroom-mw type:"
-echo "   "
-echo "yarn start"
-echo "   "
+echo "${reset} "
+echo "${red}yarn start"
+echo "${reset} "
 
-# yarn install and run
-# yarn
-# yarn start
-
-
-
-
- 

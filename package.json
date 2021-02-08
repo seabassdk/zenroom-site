@@ -6,7 +6,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
   },
   "keywords": [],
   "author": "",
@@ -37,10 +41,17 @@
     "regenerator-runtime": "^0.13.5",
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.0",
+    "supertest": "^6.0.1",
     "swagger-ui-express": "^4.1.5",
-    "zenroom": "^2.1.0-d38b84d"
+    "zenroom": "^2.1.0-369a8f5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "jest-environment-node": "^26.6.2",
+    "nodemon": "^2.0.4",
+    "ts-jest": "^26.4.4"
   }
 }
